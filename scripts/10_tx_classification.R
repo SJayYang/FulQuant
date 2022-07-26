@@ -1,18 +1,27 @@
 ### given a anntotation annotate exon
-library(tidyverse)
-library(rtracklayer)
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+suppressMessages(library(GenomicRanges))
 projectFolder = "."
 SCRIPTDIR = file.path(projectFolder, "sw")
 GENOMEDIR = file.path(projectFolder, "genome")
 source(file.path(SCRIPTDIR,"clustering_functions.R"))
 
-infolder = file.path(projectFolder, "combined/tx_annot")
+args = commandArgs(trailingOnly=TRUE)
+dataFolder = args[1]
+infolder = file.path(dataFolder, "combined/tx_annot")
 
 ## reference annotation clusters after cleaning up
 load(file.path(GENOMEDIR, "tx.rda"))
+seqlevelsStyle(mygenes) <- "NCBI"
+seqlevelsStyle(tx) <- "NCBI"
+
 
 ## filtering results
 load(file.path(infolder, "txCluster.rda"))
+
+seqlevelsStyle(myclusters)="NCBI"
+myclusters = myclusters[seqnames(myclusters) %in% seqlevels(tx)]
 
 ## novelTx = sample(novelTx,100) ## debug or development only
 annotate_tx = function(thisTx, tx){
@@ -210,18 +219,18 @@ findIncludingRanges = function(query, subject, ignore.strand = FALSE){
 ### exon skipping events
 
 intronsWithExonSkippingTab  = findIncludingRanges(dataIntronRanges, knownExonsRanges)
-intronAnnot$skippedExon = tapply(
+intronAnnot$skippedExon = c(tapply(
     knownExonsRanges$name[intronsWithExonSkippingTab$subject_i],
     factor(intronsWithExonSkippingTab$query_i,intronAnnot$index),
-    paste,collapse=";")
+    paste,collapse=";"))
 intronAnnot = intronAnnot %>% mutate(exon_skipped = !is.na(skippedExon), novel_exon_skipped = exon_skipped & type =="recomb")
 
 ############## intron retention
 exonsWithIntronRetentionTab  = findIncludingRanges(dataExonRanges, knownIntronsRanges)
-exonAnnot$retainedIntron = tapply(
+exonAnnot$retainedIntron = c(tapply(
     knownIntronsRanges$name[exonsWithIntronRetentionTab$subject_i],
     factor(exonsWithIntronRetentionTab$query_i,exonAnnot$index),
-    paste,collapse=";")
+    paste,collapse=";"))
 exonAnnot = exonAnnot %>% mutate(intron_retained = !is.na(retainedIntron), novel_intron_retained = intron_retained & type == "recomb")
 
 ## for debug only
@@ -268,7 +277,8 @@ is_multi_novel = function(x){
     sum(x>0) > 1
 }
 
-rvList = mclapply(novelClusterTab$clname, function(thisClname){
+
+rvList = lapply(novelClusterTab$clname, function(thisClname){
     thisIntron = intronAnnot %>% filter(clname==thisClname)
     thisExon = exonAnnot %>% filter(clname==thisClname)
     is_exon_ext_exon = thisExon$type %in% c("ei_var","ie_var")
@@ -283,7 +293,6 @@ rvList = mclapply(novelClusterTab$clname, function(thisClname){
 
     #is_utr_var_both = thisIntron$pos_type == "singleton" & thisIntron$type == "novel"
     is_novel_exon_combnew = thisExon$type == "recomb" & !thisExon$novel_intron_retained
-
 
     infoTab = tibble(
         clname = thisClname,
@@ -344,7 +353,8 @@ rvList = mclapply(novelClusterTab$clname, function(thisClname){
 
         )
     return(infoTab)
-}, mc.cores=ncpu)
+})
+# }, mc.cores=ncpu)
 
 clusterClass = do.call(rbind, rvList)
 ## for transcript with multiple novel events
