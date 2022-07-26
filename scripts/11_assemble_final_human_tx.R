@@ -1,5 +1,5 @@
-library(tidyverse)
-library(rtracklayer)
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
 projectFolder = "."
 SCRIPTDIR = file.path(projectFolder, "sw")
 GENOMEDIR = file.path(projectFolder, "genome")
@@ -9,7 +9,9 @@ source(file.path(SCRIPTDIR, "clustering_functions.R"))
 labPrefix = "My"
 labSuffix = "Lab"
 
-infolder = file.path(projectFolder, "combined/tx_annot")
+args = commandArgs(trailingOnly=TRUE)
+dataFolder = args[1]
+infolder = file.path(dataFolder, "combined/tx_annot")
 
 load( file.path(infolder, "novel_cluster_class.rda") )
 load( file.path(infolder, "txCluster.rda") )
