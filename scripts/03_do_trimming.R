@@ -1,7 +1,8 @@
-library(nanopore)
-library(doMC)
+suppressMessages(library(nanopore))
+suppressMessages(library(doMC))
 
-folder = "."
+args = commandArgs(trailingOnly=TRUE)
+folder = args[1]
 
 outfolder = file.path(folder, "fastq_trimmed")
 if(!file.exists(outfolder)) dir.create(outfolder)
@@ -17,8 +18,11 @@ minimalMeanQscore = 6
 saveLog=TRUE
 readsChunkSize=1e6
 
+registerDoMC(4)
+# original
+# registerDoMC(cores=round(length(infiles)/2))
 
-registerDoMC(cores=round(length(infiles)/2))
+
 
 foreach(readsFile=iter(infiles)) %dopar% {
     bn = sub(".fastq.gz","", basename(readsFile))
