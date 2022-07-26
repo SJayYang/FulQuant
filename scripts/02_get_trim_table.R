@@ -1,5 +1,5 @@
-library(nanopore)
-library(parallel)
+suppressMessages(library(nanopore))
+suppressMessages(library(parallel))
 ncpu = 30
 
 make_full_table=function(x){
@@ -18,7 +18,8 @@ make_full_table=function(x){
     rv
 }
 
-folder = "."
+args = commandArgs(trailingOnly=TRUE)
+folder = args[1]
 
 infolder = file.path(folder, "fastq", "trimmed")
 infiles = dir(infolder, "*_identify_adapter.txt.gz", full.names=TRUE)
