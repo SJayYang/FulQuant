@@ -1,19 +1,26 @@
 ## annotate tx clusters using known annotation
 
-library(rtracklayer)
-library(tidyverse)
+suppressMessages(library(rtracklayer))
+suppressMessages(library(tidyverse))
+suppressMessages(library(GenomicRanges))
 projectFolder = "."
 SCRIPTDIR = file.path(projectFolder, "sw")
 GENOMEDIR = file.path(projectFolder, "genome")
 source(file.path(SCRIPTDIR,"clustering_functions.R"))
 
-infolder = file.path(projectFolder, "combined")
+args = commandArgs(trailingOnly=TRUE)
+dataFolder = args[1]
+infolder = file.path(dataFolder, "combined")
 
 ## export reads supporting novel tx
 doExtractReads = FALSE
 
 ### reference clusters with no mutil hits
 load(file.path(GENOMEDIR, "tx.rda"))
+
+#### REMOVE THE CHR FROM THE LOADED CLUSTERS
+seqlevelsStyle(mygenes) <- "NCBI"
+seqlevelsStyle(tx) <- "NCBI"
 
 ### txCluster after filtering
 load(file.path(infolder, "cluster_filtered.rda"))
