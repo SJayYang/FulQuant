@@ -1,14 +1,17 @@
 #### annotation free cluster filtering
-library(tidyverse)
-library(rtracklayer)
-library(parallel)
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+suppressMessages(library(parallel))
 projectFolder = "."
+args = commandArgs(trailingOnly=TRUE)
+folder = args[1]
+# folder="/home/yangs/ONT_comparisons/Dopa_Motor"
 SCRIPTDIR = file.path(projectFolder, "sw/")
 GENOMEDIR = file.path(projectFolder, "genome")
 source(file.path(SCRIPTDIR,"clustering_functions.R"))
 
 ###################################################################################################
-infolder = file.path(projectFolder, "combined")
+infolder = file.path(folder, "combined")
 load(file.path(infolder,"all.clustered.rda"))
 
 outfolder=infolder
@@ -16,6 +19,7 @@ if(!file.exists(outfolder)) dir.create(outfolder)
 
 outfile = file.path(outfolder, "cluster_filtered.rda")
 message( "Outputting to ", outfile )
+print(file.path(infolder,"clip_profile_at_ends.gz"))
 
 #####################################################################################################
 ##### filter reads
@@ -27,7 +31,7 @@ myinserts = read_insert_profile_near_ss_file(file.path(infolder,"insert_profile_
 myclipsDF = myclips %>% group_by(qname) %>% summarise(max_clip_width=max(width))
 myinsertsDF = myinserts %>% group_by(qname) %>% summarise(max_insert=max(width_left + width_right))
 
-ncpu=20 ## not too many cpu to avoid mem overflow on the server
+ncpu=10 ## not too many cpu to avoid mem overflow on the server
 myreads$clname = pvec(myreads$rcluster,standardise_clname,mc.cores=ncpu)
 
 ######### readtab contains the information for filtering later
@@ -120,7 +124,7 @@ names(readClusterCensus) = readClusterCensus$name
 stopifnot(identical(names(readCluster),readClusterCensus$name))
 stopifnot(identical(names(readCluster),names(nFullLength)))
 
-polyAMaskFile = file.path(GENOMEDIR,"polyA_mask_seed5_windowSize20_cutoff60_recovered.txt.gz")
+polyAMaskFile = file.path(GENOMEDIR,"polyA_mask_seed5_windowSize20_cutoff60_recovered_no_chr.txt.gz")
 d_start_polyARich = dist_to_polyARich_region(readClusterCensus,"start",ignore.strand=TRUE,polyAmaskFile)
 d_end_polyARich = dist_to_polyARich_region(readClusterCensus,"end",ignore.strand=TRUE,polyAmaskFile)
 distPolyARich = dist_to_polyA_rich_region_strand_specific(readClusterCensus, polyAMaskFile)
