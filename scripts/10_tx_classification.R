@@ -278,7 +278,7 @@ is_multi_novel = function(x){
 }
 
 
-rvList = lapply(novelClusterTab$clname, function(thisClname){
+rvList = mclapply(novelClusterTab$clname, function(thisClname){
     thisIntron = intronAnnot %>% filter(clname==thisClname)
     thisExon = exonAnnot %>% filter(clname==thisClname)
     is_exon_ext_exon = thisExon$type %in% c("ei_var","ie_var")
@@ -353,8 +353,7 @@ rvList = lapply(novelClusterTab$clname, function(thisClname){
 
         )
     return(infoTab)
-})
-# }, mc.cores=ncpu)
+}, mc.cores=ncpu)
 
 clusterClass = do.call(rbind, rvList)
 ## for transcript with multiple novel events
