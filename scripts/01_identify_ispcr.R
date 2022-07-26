@@ -1,8 +1,10 @@
 ## trimming off adapters
 
-library(nanopore)
+suppressMessages(library(nanopore))
+suppressMessages(library(parallel))
 
-folder = "."
+args = commandArgs(trailingOnly=TRUE)
+folder = args[1]
 
 infolder = file.path(folder, "fastq", "demultiplexed")
 outfolder = file.path(folder, "fastq", "trimmed")
@@ -14,7 +16,7 @@ adapter = c("forward"="TTTCTGTTGGTGCTGATATTGC", "reverse"="ACTTGCCTGTCGCTCTATCTT
 
 windowSize = 300
 readsChunkSize = 1e6
-ncpu = 30 ## FIXME this as a option
+ncpu = 15 ## FIXME this as a option
 gapOpening = 1
 gapExtension = 3
 get_pwa_cutoff = function(M,adapter,FDR){
@@ -100,7 +102,7 @@ for(infile in infiles){
             },mc.cores=ncpu)
         ans= do.call(rbind,ans)
 
-        write_tsv(ans,outfile, append=file.exists(outfile))
+        write_tsv(ans,file=outfile, append=file.exists(outfile))
     }
     close(fs)
 }
