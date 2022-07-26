@@ -6,12 +6,15 @@
 
 
 ## merge bam files for this dataset both long and read reads
-folder="."
+folder=$1
 indir=$folder/alignments_no_supp/
 outdir=$folder/combined/
 mkdir -p $outdir
-outfile=$outdir/ont_combined_no_supp.bam
-samtools merge -u -@ 20 - $(ls $indir/*bam) | samtools sort -m 4G -@ 20 > $outfile && samtools index -@ 20 $outfile
+outfile=$outdir/fulquant_combined_no_supp.bam
+ncpu=20
+samtools merge -u -@ $ncpu - $(ls $indir/*bam) | samtools sort -m 1G -@ $ncpu > $outfile && samtools index -@ $ncpu $outfile
 
+rm -f $outdir/all.bam
+rm -f $outdir/all.bam.bai
 ln -s $outfile $outdir/all.bam
 ln -s $outfile.bai $outdir/all.bam.bai
