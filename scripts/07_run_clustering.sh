@@ -6,9 +6,10 @@
 
 
 ## first merge relevant bam files into one
-SCRIPTDIR=sw/
-folder="."
+SCRIPTDIR=~/FulQuant/sw
+folder=$1
+combined_folder=$folder/combined
 
 cd $folder/combined
 
-bash $SCRIPTDIR/run_clustering.sh all.bam
+bash $SCRIPTDIR/run_clustering.sh $combined_folder/all.bam
