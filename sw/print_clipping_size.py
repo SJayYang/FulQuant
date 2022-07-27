@@ -61,7 +61,9 @@ def read_to_iv(thisRead):
                           thisRead.reference_end)
     return iv
 
-bamFP = pysam.Samfile("-", "rb")
+bamFile = sys.argv[1]
+bamFP = pysam.Samfile(bamFile, "rb")
+#bamFP = pysam.Samfile("-", "rb")
 #bamFP = pysam.Samfile("./chrIS_subreads_no.bam", "rb")
 
 for read in bamFP:
@@ -75,5 +77,5 @@ for read in bamFP:
             for thisCp in cp:
                 i += 1
                 if(thisCp.size>=minClipSizeToReport):
-                    print read.query_name,"\t",read.reference_name,"\t", i,"\t",\
-                        thisCp.size,"\t",thisCp.type
+                    print(read.query_name,"\t",read.reference_name,"\t", i,"\t",\
+                        thisCp.size,"\t",thisCp.type)
