@@ -10,7 +10,7 @@
 
 infile=$1
 ncpu=20
-SCRIPTDIR=sw/
+SCRIPTDIR=~/FulQuant/sw/
 outfile=$(dirname $infile)/$(basename $infile .bam)
 
 ## extract the splice sites
