@@ -1,6 +1,6 @@
 ## convert the bed file coverage for clustering with Wave's java software
 ## cannot work with bedGraph!!! because bedGraph's range is not supported in such conversion
-library(tidyverse)
+suppressMessages(library(tidyverse))
 #library(rtracklayer)
 
 args = commandArgs(trailingOnly = TRUE)
