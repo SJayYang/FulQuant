@@ -5,8 +5,9 @@ import pysam;
 import HTSeq;
 import re;
 
-#bamFile    = sys.argv[1];
-bamFP = pysam.Samfile("-", "rb")
+bamFile    = sys.argv[1]
+bamFP = pysam.Samfile(bamFile, "rb")
+# bamFP = pysam.Samfile("-", "rb")
 #bamFP = pysam.Samfile("./chrIS_subreads_no.bam", "rb")
 halfWindowSize = 15;
 ## FIXME provide this as a option
@@ -56,6 +57,6 @@ for read in bamFP:
                     totalSize = insertSizeLeft + insertSizeRight
 
                     if( totalSize >=minInsertToReport) :
-                        print read.query_name,"\t",read.reference_name,"\t", i,"\t",\
+                        print(read.query_name,"\t",read.reference_name,"\t", i,"\t",\
                             thisIntron.ref_iv.start,"\t",thisIntron.ref_iv.end,"\t", \
-                            insertSizeLeft,"\t", insertSizeRight, "\t", totalSize
+                            insertSizeLeft,"\t", insertSizeRight, "\t", totalSize)
