@@ -6,18 +6,22 @@
 
 
 ## run various tables for filtering later
-scriptFolder=sw
-folder="."
+scriptFolder=~/FulQuant/sw
+folder=$1
 infile=$folder/combined/all.bam
 
 infolder=$(dirname $infile)
 cd $infolder
 ncpu=15
 
-samtools view -@ $ncpu -u $infile | python $scriptFolder/count_insert_size_near_splice_site.py \
+# samtools view -@ $ncpu -u $infile | python $scriptFolder/count_insert_size_near_splice_site.py \
+#    | pigz -c -p $ncpu > insert_profile_near_ss.gz &
+python $scriptFolder/count_insert_size_near_splice_site.py $infile \
     | pigz -c -p $ncpu > insert_profile_near_ss.gz &
 
-samtools view -@ $ncpu -u $infile | python $scriptFolder/print_clipping_size.py \
-    | pigz -c -p $ncpu > clip_profile_at_ends.gz &
+# samtools view -@ $ncpu -u $infile | python $scriptFolder/print_clipping_size.py \
+#    | pigz -c -p $ncpu > clip_profile_at_ends.gz &
+python $scriptFolder/print_clipping_size.py $infile\
+   | pigz -c -p $ncpu > clip_profile_at_ends.gz &
 
 ## run polyA mask scan
