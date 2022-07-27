@@ -1,16 +1,17 @@
+#!/bin/bash
 # @Author: Chenchen Zhu <czhu>
 # @Date:   30-10-2019
 # @Email:  czhu@me.com
 # @Last modified by:   czhu
 # @Last modified time: 2021-02-26
 
-#!/bin/bash
 ## index
 #faFile=GRCh37_sequin.fa.gz
-index=hg38_SIRV.fa.gz.idx
 
 ## one time index
-# minimap2 -t 30 -x splice -d GRCh37_sequin.fa.idx GRCh37_sequin.fa.gz
+# minimap2 -t 20 -x splice -d /home/yangs/FulQuant/genome/SIRV3_ERCC_Homo_sapiens.GRCh38.dna.sequins.primary_assembly.fa.idx /home/yangs/FulQuant/genome/SIRV3_ERCC_Homo_sapiens.GRCh38.dna.sequins.primary_assembly.fa.gz
+
+index=/home/yangs/FulQuant/genome/SIRV3_ERCC_Homo_sapiens.GRCh38.dna.sequins.primary_assembly.fa.idx
 
 infile=$1
 if [[ "$infile" != /* ]]; then
