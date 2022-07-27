@@ -55,11 +55,11 @@ get_cluster_optimised = function(x){
     ans
 }
 
-library(tidyverse)
-library(rtracklayer)
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
 
 myignoreStrand = TRUE
-ncpu=30
+ncpu=10
 
 args = commandArgs(trailingOnly = TRUE)
 #
