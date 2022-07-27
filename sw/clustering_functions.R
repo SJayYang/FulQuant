@@ -547,7 +547,7 @@ read_polyA_file = function(x){
 }
 
 dist_to_polyARich_region = function(x,type="start",ignore.strand=TRUE,
-    polyAMaskFile="/g/steinmetz/czhu/project/pore/data/genome/GRCh38.91/polyA_site_filter/polyA_mask_seed5_windowSize20_cutoff60_recovered.txt.gz"
+    polyAMaskFile="/home/yangs/FulQuant/genome/polyA_mask_seed5_windowSize20_cutoff60_recovered_no_chr.txt.gz"
     ){
     pos_to_gr = function(pos){ GRanges(seqnames(x),IRanges(pos,pos)) }
     polyATab = read_polyA_file(polyAMaskFile)
@@ -565,7 +565,7 @@ dist_to_polyARich_region = function(x,type="start",ignore.strand=TRUE,
 
 dist_to_polyA_rich_region_strand_specific = function(
     x,
-    polyAMaskFile="/g/steinmetz/czhu/project/pore/data/genome/GRCh38.91/polyA_site_filter/polyA_mask_seed5_windowSize20_cutoff60_recovered.txt.gz"
+    polyAMaskFile="/home/yangs/FulQuant/genome/polyA_mask_seed5_windowSize20_cutoff60_recovered_no_chr.txt.gz"
     ){
     ## x is tx class
     polyATab = read_polyA_file(polyAMaskFile)
