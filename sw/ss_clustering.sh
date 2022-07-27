@@ -14,11 +14,11 @@ fi
 OUTFILE=`dirname $INFILE`/`basename $INFILE tsv`clustered.bed
 CURRENTDIR=$PWD
 
-CHRLENFILE=genome/hg38_SIRV.fa.genomeFile
+CHRLENFILE=~/FulQuant/genome/sizes.genome
 
 printf "input is $INFILE \noutput is $OUTFILE \n"
 
-cd sw/TScluster
+cd ~/FulQuant/sw/TScluster
 java -Xmx100G -cp .:jars/* TIFSeq.TScluster F1=$INFILE F2=$CHRLENFILE outF=$OUTFILE HFWINSIZE=5 DISTHRES=8 PTHRESHOLD=3 SUMHOLD=5
 cd $CURRENTDIR
 #javasol TIFSeq.TScluster F1=$INFILE F2=$CHRLENFILE outF=$OUTFILE HFWINSIZE=5 DISTHRES=11 PTHRESHOLD=2 SUMHOLD=3
