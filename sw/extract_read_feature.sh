@@ -9,9 +9,14 @@
 # bam file as input
 infile=$1
 outfile=$(dirname $infile)/$(basename $infile .bam)
-ncpu=30
-genomefile=genome/hg38_SIRV.fa.genomeFile
+ncpu=20
+# genomefile=genome/hg38_SIRV.fa.genomeFile
+# How to make this file 
+# samtools faidx SIRV3_ERCC_Homo_sapiens.GRCh38.dna.sequins.primary_assembly.fa
+# cut -f1,2 SIRV3_ERCC_Homo_sapiens.GRCh38.dna.sequins.primary_assembly.fa.fai > sizes.genome
+genomefile=genome/sizes.genome
 scriptFolder=sw
+cd ~/FulQuant
 ## exclude secondary alignment and supplementary alignment
 ## 256 is secondary and 2048 is supplementary we don't take either
 samtools view -@ $ncpu -u -F 2304 $infile | bedtools bamtobed -bed12 -cigar > "$outfile".bed
