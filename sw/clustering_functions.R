@@ -587,7 +587,7 @@ dist_to_polyA_rich_region_strand_specific = function(
         do.call(rbind,rv)
     }
 
-    thisDist = distanceToNearestMC(poi, mypolyGR,ignore.strand = FALSE, ncpu=30)
+    thisDist = distanceToNearestMC(poi, mypolyGR,ignore.strand = FALSE, ncpu=15)
     #ans = distanceToNearest(poi, mypolyGR,ignore.strand=FALSE)
     #ans = mcols(ans)$distance
     ans[thisDist$queryHits] = thisDist$distance
@@ -596,11 +596,11 @@ dist_to_polyA_rich_region_strand_specific = function(
         wh = which(strand(x) == "*")
         distLeft = distanceToNearestMC(
             GRanges( seqnames(x)[wh], IRanges(start(x)[wh],width=1) ),
-            mypolyGR,ignore.strand = TRUE,ncpu=30)
+            mypolyGR,ignore.strand = TRUE,ncpu=15)
 
         distRight = distanceToNearestMC(
             GRanges(seqnames(x)[wh], IRanges(end(x)[wh],width=1) ),
-            mypolyGR, ignore.strand = TRUE, ncpu=30)
+            mypolyGR, ignore.strand = TRUE, ncpu=15)
 
         mymat = matrix(rep(as.integer(NA) , 2*length(wh)),ncol=2)
 
