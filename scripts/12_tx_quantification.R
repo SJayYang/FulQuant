@@ -6,7 +6,7 @@ SCRIPTDIR = file.path(projectFolder, "sw")
 GENOMEDIR = file.path(projectFolder, "genome")
 source(file.path(SCRIPTDIR,"clustering_functions.R"))
 
-ncpu=20
+ncpu=10
 
 args = commandArgs(trailingOnly=TRUE)
 dataFolder = args[1]

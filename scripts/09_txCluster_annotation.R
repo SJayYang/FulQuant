@@ -205,7 +205,7 @@ reduce_to_consensus = function(x, ncpu=10){
     res[order(res)]
 }
 
-myclusters = reduce_to_consensus(thisTxCluster,ncpu=30)
+myclusters = reduce_to_consensus(thisTxCluster,ncpu=8)
 
 export(myclusters[!is.na(myclusters$associated_tx) | myclusters$flag==0],
     file.path(outfolder,"clusters_putative.bed.gz"))

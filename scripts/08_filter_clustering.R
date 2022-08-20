@@ -31,7 +31,7 @@ myinserts = read_insert_profile_near_ss_file(file.path(infolder,"insert_profile_
 myclipsDF = myclips %>% group_by(qname) %>% summarise(max_clip_width=max(width))
 myinsertsDF = myinserts %>% group_by(qname) %>% summarise(max_insert=max(width_left + width_right))
 
-ncpu=10 ## not too many cpu to avoid mem overflow on the server
+ncpu=8 ## not too many cpu to avoid mem overflow on the server
 myreads$clname = pvec(myreads$rcluster,standardise_clname,mc.cores=ncpu)
 
 ######### readtab contains the information for filtering later

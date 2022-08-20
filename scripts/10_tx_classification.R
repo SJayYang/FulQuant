@@ -239,7 +239,7 @@ knownExonsRanges$igvCoord  = granges_to_igv_coord(knownExonsRanges)
 
 
 #################
-ncpu=30
+ncpu=15
 mypaste = function(x){paste(x, collapse=";")}
 
 ## classification according to discussion on April.23.2018
