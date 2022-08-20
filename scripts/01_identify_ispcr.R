@@ -16,7 +16,7 @@ adapter = c("forward"="TTTCTGTTGGTGCTGATATTGC", "reverse"="ACTTGCCTGTCGCTCTATCTT
 
 windowSize = 300
 readsChunkSize = 1e6
-ncpu = 15 ## FIXME this as a option
+ncpu = 10 ## FIXME this as a option
 gapOpening = 1
 gapExtension = 3
 get_pwa_cutoff = function(M,adapter,FDR){
@@ -57,7 +57,7 @@ for(infile in infiles){
     fs= FastqStreamer(infile,n=readsChunkSize)
 
     while (length(fqBatch <- yield(fs))) {
-        ans = mclapply(split(fqBatch,cut(seq_len(length(fqBatch)),ncpu)),function(fq) {
+        ans = lapply(split(fqBatch,cut(seq_len(length(fqBatch)),ncpu)),function(fq) {
             qs = get_quality(fq)
             readStats = tibble(
                 read_id = sapply(strsplit(as.character(ShortRead::id(fq))," "),"[",1),
@@ -99,7 +99,8 @@ for(infile in infiles){
                 left_join(extract_res_tibble(polyAByLength,".polyA",usefulColsPolyA), by="read_id") %>%
                 left_join(extract_res_tibble(polyAByDist,".polyA.d",c("read_id","start","end","adapter_id")),
                     by="read_id")
-            },mc.cores=ncpu)
+	})
+         #   },mc.cores=ncpu)
         ans= do.call(rbind,ans)
 
         write_tsv(ans,file=outfile, append=file.exists(outfile))
